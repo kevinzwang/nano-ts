@@ -1,0 +1,22 @@
+{
+  "name": "marvin-ts",
+  "version": "1.0.0-beta.0",
+  "description": "Kevin's Discord bot, this time written in Typescript with the Discord.js lib.",
+  "main": "dist/index.js",
+  "author": "kevinzwang",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "yarn run build && yarn run serve",
+    "build": "tsc",
+    "serve": "node ."
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "discord.js": "^11.3.2",
+    "discord.js-commando": "^0.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^10.5.2",
+    "typescript": "^2.9.2"
+  }
+}
