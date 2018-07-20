@@ -12,7 +12,7 @@ export class InviteCommand extends Command {
     }
     run(msg: CommandMessage): Promise<Message | Message[]> {
         return this.client.generateInvite().then(inv => {
-            return msg.channel.send(inv)
+            return msg.channel.send(`<${inv}>`)
         })
     }
 }
