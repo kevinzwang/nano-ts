@@ -22,6 +22,9 @@ process.on('message', (msg: ProcessEvent) => {
         case 'EXIT':
             exit()
             break
+        case 'INVITE_REQUEST':
+            replyInvite()
+            break
     }
 })
 
@@ -29,6 +32,19 @@ function sendSpoiler(channel: string, msg: string) {
     let chan = client.channels.get(channel)
     if (chan) {
         (<TextChannel | GroupDMChannel>chan).send(msg)
+    }
+}
+
+function replyInvite() {
+    if (process) {
+        client.generateInvite().then(inv => {
+            (<any> process).send({ 
+                type: 'INVITE_RESPONSE',
+                data: {
+                    invite: inv
+                }
+            })
+        })
     }
 }
 

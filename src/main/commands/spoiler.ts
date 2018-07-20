@@ -20,7 +20,7 @@ export class SpoilerCommand extends Command {
         let helper = await this.client.fetchUser(getHelperID())
 
         if (!msg.guild.members.some(usr => usr.id == helper.id)) {
-            msg.channel.send(`You must add ${helper.tag} for this command to work. Contact this bot's owner for more info.`)
+            msg.channel.send(`You must add ${helper.tag} for this command to work. Use the invite command to get invite links.`)
             return
         }
 

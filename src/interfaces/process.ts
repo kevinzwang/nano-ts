@@ -5,7 +5,11 @@ export interface SpoilerMsg {
     channel: string
 }
 
+export interface InviteResponse {
+    invite: string
+}
+
 export interface ProcessEvent {
-    type: 'SPOILER' | 'EXIT'
-    data?: SpoilerMsg
+    type: 'SPOILER' | 'EXIT' | 'INVITE_REQUEST' | 'INVITE_RESPONSE'
+    data?: SpoilerMsg | InviteResponse
 }
