@@ -11,6 +11,8 @@ export class InviteCommand extends Command {
         })
     }
     run(msg: CommandMessage): Promise<Message | Message[]> {
-        return msg.channel.send(`<https://discordapp.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot>`)
+        return this.client.generateInvite().then(inv => {
+            return msg.channel.send(inv)
+        })
     }
 }

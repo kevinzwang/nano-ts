@@ -5,6 +5,7 @@ interface ConfigFile {
     token: string
     ownerID: string
     supportServer?: string
+    github?: string
     guilds: {
         global:  {
             prefix: string
@@ -45,6 +46,10 @@ export function getPrefix(guild: string): string | null | undefined {
 
 export function getSupportServer(): string | undefined {
     return readConfig().supportServer
+}
+
+export function getGithub(): string | undefined {
+    return readConfig().github
 }
 
 export function setPrefix(guild: string, prefix: string | null) {
