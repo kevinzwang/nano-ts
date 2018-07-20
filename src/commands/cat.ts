@@ -9,13 +9,14 @@ export class CatCommand extends Command {
             group: 'fun',
             memberName: 'cat',
             description: 'Gives you a cute cat pic!',
+            aliases: ['kitty'],
             throttling: {
                 usages: 3,
                 duration: 10
             }
         })
     }
-    run(msg: CommandMessage, _0: any, _1: any): Promise<Message | Message[]> {
+    run(msg: CommandMessage): Promise<Message | Message[]> {
         return axios.get('http://aws.random.cat/meow').then(resp => {
             return msg.channel.send(resp.data.file)
         }).catch(() => {

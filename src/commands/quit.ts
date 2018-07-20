@@ -21,9 +21,9 @@ export class QuitCommand extends Command {
         })
     }
 
-    run(msg: CommandMessage, _0: any, _1: any): Promise<any> {
+    run(msg: CommandMessage): any {
         let randIndex = Math.floor(Math.random() * exitMessages.length)
-        return msg.channel.send(exitMessages[randIndex]).then(() => {
+        msg.channel.send(exitMessages[randIndex]).then(() => {
             quit()
         })
     }
