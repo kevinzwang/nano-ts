@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 import { Message } from 'discord.js';
-import * as config from '../config';
+import * as config from '../../config';
 
 
 export class InfoCommand extends Command {

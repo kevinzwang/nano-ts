@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 
-import { quit } from '..'
+import { exit } from '..'
 
 const exitMessages = [
     'Hasta la vista, baby.',
@@ -24,7 +24,7 @@ export class QuitCommand extends Command {
     run(msg: CommandMessage): any {
         let randIndex = Math.floor(Math.random() * exitMessages.length)
         msg.channel.send(exitMessages[randIndex]).then(() => {
-            quit()
+            exit()
         })
     }
 }

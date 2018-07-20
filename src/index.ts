@@ -1,43 +1,23 @@
-import * as Commando from 'discord.js-commando'
+import * as cp from 'child_process'
 import * as path from 'path'
 
-import * as config from './config';
+import { ProcessEvent } from './interfaces/process'
 
-const client = new Commando.CommandoClient({
-    owner: config.getOwner(),
-    commandPrefix: <string>config.getPrefix('global'),
-    invite: config.getSupportServer()
-})
+const mainPath = path.join(__dirname, 'main/index.js')
+const helperPath = path.join(__dirname, 'helper/index.js')
 
-client.registry
-    .registerGroups([
-        ['fun', 'Fun'],
-        ['weeb', 'Weeb']
-    ])
-    .registerDefaults()
-    .registerCommandsIn(path.join(__dirname, 'commands'));
+const main = cp.fork(mainPath)
+const helper = cp.fork(helperPath)
 
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-});
-
-client.on('commandPrefixChange', (guild, prefix) => {
-    if (guild || prefix) {
-        let id = guild ? guild.id : 'global'
-        config.setPrefix(id, prefix)
+main.on('message', (msg: ProcessEvent) => {
+    if (msg.type === 'SPOILER') {
+        helper.send(msg)
     }
 })
 
-client.on('commandRun', (_0: any, _1: any, msg: Commando.CommandMessage) => {
-    msg.channel.startTyping()
+main.on('exit', () => {
+    let msg: ProcessEvent = {
+        type: 'EXIT'
+    }
+    helper.send(msg)
 })
-
-client.login(config.getToken());
-
-export function quit() {
-    client.destroy()
-    console.log('\nQuitting...')
-    process.exit()
-}
-
-process.on('SIGINT', quit)

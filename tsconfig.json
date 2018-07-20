@@ -17,6 +17,6 @@
         "src/**/*"
     ],
     "exclude": [
-        "src/commands/template.ts"
+        "src/main/commands/template.ts"
     ]
 }
