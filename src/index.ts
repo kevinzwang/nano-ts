@@ -28,6 +28,10 @@ client.on('commandPrefixChange', (guild, prefix) => {
     }
 })
 
+client.on('commandRun', (_0: any, _1: any, msg: Commando.CommandMessage) => {
+    msg.channel.startTyping()
+})
+
 client.login(config.getToken());
 
 export function quit() {

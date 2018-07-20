@@ -229,7 +229,7 @@ export class AnimeCommand extends Command {
                         },
                         {
                             name: 'Genres',
-                            value: genres,
+                            value: genres === '' ? 'none' : genres,
                             inline: true
                         }
                     ],
