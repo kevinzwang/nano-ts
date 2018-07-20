@@ -11,9 +11,12 @@
     "serve": "node ."
   },
   "dependencies": {
+    "@types/html-entities": "^1.2.16",
     "axios": "^0.18.0",
     "discord.js": "^11.3.2",
-    "discord.js-commando": "^0.10.0"
+    "discord.js-commando": "^0.10.0",
+    "html-entities": "^1.2.1",
+    "turndown": "^4.0.2"
   },
   "devDependencies": {
     "@types/node": "^10.5.2",
