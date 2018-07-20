@@ -13,7 +13,11 @@ export class SpoilerCommand extends Command {
             group: 'misc',
             memberName: 'spoiler',
             description: 'Hides your message with the help of Nano.',
-            guildOnly: true
+            guildOnly: true,
+            throttling: {
+                usages: 3,
+                duration: 60
+            }
         })
     }
     async run(msg: CommandMessage): Promise<any> {
