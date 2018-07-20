@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 import { Message } from 'discord.js';
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 
 export class CatCommand extends Command {
     constructor(client: CommandoClient) {
