@@ -58,7 +58,7 @@ export class AnimeCommand extends Command {
                 let n = Number(m.content)
                 if (isNaN(n)) return false // if it's not a number
                 if (n <= 0 || n > this.perPage) return false // if it's not within 1 - 8
-                if (!page.pageInfo.hasNextPage && (n > page.pageInfo.total % this.perPage || page.pageInfo.total % this.perPage == 0)) return false // if it's the last page and it's not within bounds
+                if (!page.pageInfo.hasNextPage && (n > page.pageInfo.total % this.perPage && page.pageInfo.total % this.perPage != 0)) return false // if it's the last page and it's not within bounds
 
                 return true
             }
