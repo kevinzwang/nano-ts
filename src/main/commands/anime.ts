@@ -131,12 +131,16 @@ export class AnimeCommand extends Command {
             switch (a.format) {
                 case 'TV_SHORT':
                     format = 'TV Short'
+                    break
                 case 'MOVIE':
                     format = 'Movie'
+                    break
                 case 'SPECIAL':
                     format = 'Special'
+                    break
                 case 'MUSIC':
                     format = 'Music'
+                    break
                 default:
                     format = a.format
             }
@@ -154,14 +158,14 @@ export class AnimeCommand extends Command {
                 let remainder = a.nextAiringEpisode.timeUntilAiring
 
                 // days
-                if (remainder/86400 != 0) {
+                if (Math.floor(remainder/86400) != 0) {
                     status += ` ${Math.floor(remainder/86400)}d`
                     remainder %= 86400
 			        prevCounted = true
                 }
 
                 // hours
-                if (remainder/3600 != 0 || prevCounted) {
+                if (Math.floor(remainder/3600) != 0 || prevCounted) {
                     status += ` ${Math.floor(remainder/3600)}h`
                     remainder %= 3600
                     prevCounted = true
