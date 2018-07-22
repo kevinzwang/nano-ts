@@ -21,7 +21,6 @@ export class CatCommand extends Command {
             return msg.channel.send(resp.data.file)
         }).catch(() => {
             msg.channel.send('Primary cat API request error. Querying backup API...')
-            msg.channel.startTyping()
             return axios.get('http://thecatapi.com/api/images/get').then(resp => {
                 return msg.channel.send(resp.request.res.responseUrl)
             })
