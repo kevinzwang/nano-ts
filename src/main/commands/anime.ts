@@ -122,7 +122,7 @@ export class AnimeCommand extends Command {
 
     private sendAnime(channel: TextChannel | DMChannel | GroupDMChannel, id: number): Promise<Message | Message[]> {
         return this.queryAnime(id).then(a => {
-            let description: string = turndownService.turndown(entities.decode(a.description)).replace(/\n/g, ' ')
+            let description: string = turndownService.turndown(entities.decode(a.description)).replace(/\s\s+/g, ' ');
             if (description.length > this.maxDescLen) {
                 description = description.substring(0, this.maxDescLen - 3) + '...'
             }
