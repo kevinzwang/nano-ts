@@ -178,7 +178,7 @@ export class AnimeCommand extends Command {
                         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
                     });
                 }
-                status = toTitleCase(a.status.replace('_', ' '))
+                status = toTitleCase(a.status.replace(/_/g, ' '))
             }
 
             let allTimePop = 0
