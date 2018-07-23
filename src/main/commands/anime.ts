@@ -189,10 +189,6 @@ export class AnimeCommand extends Command {
                 }
             }
 
-            if (allTimePop < 1 && a.rankings.length > 0) {
-                allTimePop = a.rankings[0].rank
-            }
-
             let genres = ''
             for (let i = 0; i < a.genres.length; i++) {
                 genres += `[${a.genres[i]}](https://anilist.co/search/anime?includedGenres=${encodeURIComponent(a.genres[i])})`
@@ -223,17 +219,17 @@ export class AnimeCommand extends Command {
                         },
                         {
                             name: 'Score',
-                            value: a.meanScore + '%',
+                            value: a.meanScore == null ? '¯\\_(ツ)_/¯' : a.meanScore + '%',
                             inline: true
                         },
                         {
                             name: 'Popularity',
-                            value: '#' + allTimePop,
+                            value: allTimePop == 0 ? '¯\\_(ツ)_/¯' : '#' + allTimePop,
                             inline: true
                         },
                         {
                             name: 'Genres',
-                            value: genres === '' ? 'none' : genres,
+                            value: genres === '' ? 'None' : genres,
                             inline: true
                         }
                     ],
