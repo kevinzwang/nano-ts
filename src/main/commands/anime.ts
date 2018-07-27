@@ -7,7 +7,7 @@ const entities = new XmlEntities()
 const TurndownService = require('turndown')
 const turndownService = new TurndownService()
 
-import { searchQuery, animeQuery } from '../../constants/anime'
+import { searchQuery, animeQuery } from '../../constants/anilist'
 import { SearchPage, Anime } from '../../interfaces/anime'
 
 export class AnimeCommand extends Command {
@@ -219,17 +219,17 @@ export class AnimeCommand extends Command {
                         },
                         {
                             name: 'Score',
-                            value: a.meanScore == null ? '¯\\_(ツ)_/¯' : a.meanScore + '%',
+                            value: a.meanScore ? a.meanScore + '%' : '¯\\_(ツ)_/¯',
                             inline: true
                         },
                         {
                             name: 'Popularity',
-                            value: allTimePop == 0 ? '¯\\_(ツ)_/¯' : '#' + allTimePop,
+                            value: allTimePop ? '#' + allTimePop : '¯\\_(ツ)_/¯',
                             inline: true
                         },
                         {
                             name: 'Genres',
-                            value: genres === '' ? 'None' : genres,
+                            value: genres ? genres : 'None',
                             inline: true
                         }
                     ],

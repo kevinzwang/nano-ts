@@ -43,3 +43,28 @@ query AnimeResult ($id: Int) {
     }
 }
 `
+
+export const animeListQuery = `
+query GetAnilist ($name: String) {
+    User (name: $name) {
+        name
+        avatar {
+            large
+        }
+        siteUrl
+        options {
+            profileColor
+        }
+        stats {
+            watchedTime
+            animeListScores {
+                meanScore
+            }
+            animeStatusDistribution {
+                status
+                amount
+            }
+        }
+    }
+}
+`
