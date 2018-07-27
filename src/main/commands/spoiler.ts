@@ -14,6 +14,10 @@ export class SpoilerCommand extends Command {
             memberName: 'spoiler',
             description: 'Hides your message with the help of Nano.',
             guildOnly: true,
+            aliases: [
+                'spoilers',
+                's'
+            ],
             throttling: {
                 usages: 3,
                 duration: 60
