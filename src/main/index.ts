@@ -30,6 +30,10 @@ client.on('commandPrefixChange', (guild, prefix) => {
     }
 })
 
+client.on('error', (err) => {
+    console.log(err)
+})
+
 client.login(config.getMainToken());
 
 export function exit() {

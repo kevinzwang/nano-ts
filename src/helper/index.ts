@@ -54,6 +54,10 @@ client.on('message', (msg) => {
     }
 })
 
+client.on('error', (err) => {
+    console.log(err)
+})
+
 client.login(config.getHelperToken());
 
 process.on('message', (msg: ProcessEvent) => {
