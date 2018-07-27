@@ -73,10 +73,7 @@ Planning:   ${al.stats.animeStatusDistribution[1].amount}`
 
             return msg.channel.send({
                 embed: {
-                    author: {
-                        name: al.name,
-                        icon_url: al.avatar.large
-                    },
+                    title: al.name,
                     url: al.siteUrl,
                     color: color,
                     thumbnail: {
@@ -90,7 +87,7 @@ Planning:   ${al.stats.animeStatusDistribution[1].amount}`
                         },
                         {
                             name: "Mean Score",
-                            value: al.stats.animeListScores ? al.stats.animeListScores.meanScore + '/100' : '¯\\_(ツ)_/¯',
+                            value: al.stats.animeListScores && al.stats.animeListScores.meanScore ? al.stats.animeListScores.meanScore + '/100' : '¯\\_(ツ)_/¯',
                             inline: true
                         },
                         {
