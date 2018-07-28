@@ -1,4 +1,5 @@
 import * as Discord from 'discord.js'
+import axios from 'axios'
 
 import * as config from '../config';
 import { ProcessEvent, SpoilerMsg } from '../interfaces/process'
@@ -9,6 +10,10 @@ const client = new Discord.Client();
 client.on('ready', () => {
     console.log(`Helper bot logged in as ${client.user.tag}!`);
     client.user.setStatus('dnd')
+
+    // watch ethereum
+    updateEthereum()
+    setInterval(updateEthereum, 60000)
 });
 
 let responses = [
@@ -91,6 +96,40 @@ function replyInvite() {
                     invite: inv
                 }
             })
+        })
+    }
+}
+
+async function updateEthereum() {
+    try {
+        let priceResp = await axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD&extraParams=marvin-discord-bot')
+        let historicalResp = await axios.get('https://min-api.cryptocompare.com/data/histohour?fsym=ETH&tsym=USD&limit=24&extraParams=marvin-discord-bot')
+        let yesterday = historicalResp.data.Data[0].open
+        let price = priceResp.data.USD
+
+        let presence = 'ETH - $' + price + ' '
+
+        let diff = (((price / yesterday) - 1) * 100).toFixed(2)
+        if (price > yesterday) {
+            presence += '▲'
+        } else if (price < yesterday) {
+            presence += '▼'
+        } else {
+            presence += '~'
+        }
+        presence += diff + '%'
+
+        client.user.setPresence({
+            game: {
+                name: presence
+            }
+        })
+    } catch (err) {
+        console.log(err)
+        client.user.setPresence({
+            game: {
+                name: 'ETH - $??? ???'
+            }
         })
     }
 }
