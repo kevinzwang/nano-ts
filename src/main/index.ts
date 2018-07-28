@@ -48,9 +48,9 @@ export function exit() {
 
 async function updateBitcoin() {
     try {
-        let priceResp = await axios.get('https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD&extraParams=marvin-discord-bot')
-        let historicalResp = await axios.get('https://min-api.cryptocompare.com/data/histohour?fsym=BTC&tsym=USD&limit=24&extraParams=marvin-discord-bot')
-        let yesterday = historicalResp.data.Data[0].open
+        let priceResp = await axios.get('https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD&e=Coinbase&extraParams=marvin-discord-bot')
+        let historicalResp = await axios.get(`https://min-api.cryptocompare.com/data/histominute?fsym=BTC&tsym=USD&limit=1&toTs=${Math.floor(Date.now() / 1000) - 86400}&e=Coinbase&extraParams=marvin-discord-bot`)
+        let yesterday = historicalResp.data.Data[1].open
         let price = priceResp.data.USD
 
         let presence = 'BTC - $' + price + ' '
