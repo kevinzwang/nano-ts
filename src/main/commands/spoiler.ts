@@ -2,7 +2,7 @@ import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 import { Message, TextChannel } from 'discord.js';
 
 import { ProcessEvent } from '../../interfaces/process'
-import { getHelperID, getOwner } from '../../config'
+import { getHelperID } from '../../config'
 
 export class SpoilerCommand extends Command {
     readonly embedColor: number = 0x9544ff

@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
-import { Message, TextChannel, DMChannel, GroupDMChannel } from 'discord.js';
+import { Message } from 'discord.js';
 
 import { animeListQuery } from '../../constants/anilist'
 import { AnimeList } from "../../interfaces/anilist";

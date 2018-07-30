@@ -1,5 +1,3 @@
-import {TextChannel, GroupDMChannel} from 'discord.js'
-
 export interface SpoilerMsg {
     message: string
     channel: string

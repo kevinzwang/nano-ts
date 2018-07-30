@@ -1,5 +1,4 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
-import { Message } from 'discord.js';
 
 import { ProcessEvent, InviteResponse } from '../../interfaces/process'
 

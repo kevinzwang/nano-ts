@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 import { Message } from 'discord.js';
-import axios, { AxiosPromise } from 'axios'
+import axios from 'axios'
 
 
 function nekosLife(category: string): Promise<string> {
