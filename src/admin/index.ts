@@ -26,9 +26,26 @@ client.on('message', function(msg) {
     enforce4Chan(m)
 })
 
+let channers: any = {}
+let badPeople: any = {}
 function enforce4Chan(msg: GuildMessage) {
-    if (msg.channel.name === '4chan' && msg.attachments.size == 0) {
+    if (msg.channel.name === '4chan' && (msg.attachments.size == 0 || (channers[msg.author.id] && channers[msg.author.id] > Date.now()))) {
         msg.delete()
+        
+        if (!badPeople[msg.author.id]) {
+            badPeople[msg.author.id] = 0
+        }
+        badPeople[msg.author.id]++
+
+        if (badPeople[msg.author.id] > 8) {
+            let member = msg.guild.members.get(msg.author.id)
+            if (member != undefined) {
+                member.kick('no u')
+            }
+        }
+    } else {
+        channers[msg.author.id] = Date.now() + 180000
+        badPeople[msg.author.id] = 0
     }
 }
 
