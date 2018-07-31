@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import * as config from '../config';
 import { ProcessEvent, SpoilerMsg } from '../interfaces/process'
-import { TextChannel, GroupDMChannel } from 'discord.js';
+import { TextChannel } from 'discord.js';
 
 const client = new Discord.Client();
 
@@ -81,9 +81,9 @@ process.on('message', (msg: ProcessEvent) => {
 })
 
 function sendSpoiler(channel: string, msg: string) {
-    let chan = client.channels.get(channel)
+    let chan = client.channels.get(channel) as TextChannel
     if (chan) {
-        (<TextChannel | GroupDMChannel>chan).send(msg)
+        chan.send(msg)
     }
 }
 

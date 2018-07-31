@@ -3,6 +3,7 @@ import { Message, TextChannel } from 'discord.js';
 
 import { ProcessEvent } from '../../interfaces/process'
 import { getHelperID } from '../../config'
+import { CommandGuildMessage } from '../../interfaces/discord';
 
 export class SpoilerCommand extends Command {
     readonly embedColor: number = 0x9544ff
@@ -24,7 +25,7 @@ export class SpoilerCommand extends Command {
             }
         })
     }
-    async run(msg: CommandMessage): Promise<any> {
+    async run(msg: CommandGuildMessage): Promise<any> {
         let helper = await this.client.fetchUser(getHelperID())
 
         if (!msg.guild.members.some(usr => usr.id == helper.id)) {
@@ -32,7 +33,7 @@ export class SpoilerCommand extends Command {
             return
         }
 
-        msg.author.send(`Spoiler message to #${(<TextChannel>msg.channel).name} in server ${msg.guild.name}.
+        msg.author.send(`Spoiler message to #${msg.channel.name} in server ${msg.guild.name}.
 Type \`cancel\` any time to cancel this command.
 
 First, enter a short, non-spoiler description for your message`)
