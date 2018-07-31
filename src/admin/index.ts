@@ -17,7 +17,7 @@ client.on('error', (err) => {
 })
 
 client.on('message', function(msg) {
-    if (!adminGuild || msg.guild.id !== adminGuild) {
+    if (!adminGuild || !msg.guild || msg.guild.id !== adminGuild) {
         return
     }
     
@@ -29,22 +29,29 @@ client.on('message', function(msg) {
 let channers: any = {}
 let badPeople: any = {}
 function enforce4Chan(msg: GuildMessage) {
-    if (msg.channel.name === '4chan' && (msg.attachments.size == 0 || (channers[msg.author.id] && channers[msg.author.id] > Date.now()))) {
+    if (msg.channel.name === 'kevin' && (msg.attachments.size == 0 || channers[msg.author.id] > Date.now())) {
         msg.delete()
-        
+
         if (!badPeople[msg.author.id]) {
             badPeople[msg.author.id] = 0
         }
         badPeople[msg.author.id]++
 
-        if (badPeople[msg.author.id] > 8) {
+        if (badPeople[msg.author.id] == 6) {
+            msg.author.createDM().then(chan => {
+                chan.send('ur gonna get kicked if you continue')
+            })
+        }
+
+        if (badPeople[msg.author.id] == 8) {
             let member = msg.guild.members.get(msg.author.id)
             if (member != undefined) {
                 member.kick('no u')
             }
+            badPeople[msg.author.id] = 0
         }
     } else {
-        channers[msg.author.id] = Date.now() + 180000
+        channers[msg.author.id] = Date.now() + 120000
         badPeople[msg.author.id] = 0
     }
 }
