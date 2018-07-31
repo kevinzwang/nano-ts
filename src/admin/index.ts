@@ -22,39 +22,7 @@ client.on('message', function(msg) {
     }
     
     let m = msg as GuildMessage
-
-    enforce4Chan(m)
 })
-
-let channers: any = {}
-let badPeople: any = {}
-function enforce4Chan(msg: GuildMessage) {
-    if (msg.channel.name === 'strictly-memes' && (msg.attachments.size == 0 || channers[msg.author.id] > Date.now())) {
-        msg.delete()
-
-        if (!badPeople[msg.author.id]) {
-            badPeople[msg.author.id] = 0
-        }
-        badPeople[msg.author.id]++
-
-        if (badPeople[msg.author.id] == 6) {
-            msg.author.createDM().then(chan => {
-                chan.send('ur gonna get kicked if you continue')
-            })
-        }
-
-        if (badPeople[msg.author.id] == 8) {
-            let member = msg.guild.members.get(msg.author.id)
-            if (member != undefined) {
-                member.kick('no u')
-            }
-            badPeople[msg.author.id] = 0
-        }
-    } else {
-        channers[msg.author.id] = Date.now() + 120000
-        badPeople[msg.author.id] = 0
-    }
-}
 
 client.login(config.getMainToken());
 
