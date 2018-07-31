@@ -29,7 +29,7 @@ client.on('message', function(msg) {
 let channers: any = {}
 let badPeople: any = {}
 function enforce4Chan(msg: GuildMessage) {
-    if (msg.channel.name === 'kevin' && (msg.attachments.size == 0 || channers[msg.author.id] > Date.now())) {
+    if (msg.channel.name === 'strictly-memes' && (msg.attachments.size == 0 || channers[msg.author.id] > Date.now())) {
         msg.delete()
 
         if (!badPeople[msg.author.id]) {
