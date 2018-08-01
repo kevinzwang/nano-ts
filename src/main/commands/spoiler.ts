@@ -48,16 +48,29 @@ First, enter a short, non-spoiler description for your message`)
 
             let dm = await msg.author.createDM()
 
-            let descReplies = await dm.awaitMessages(filter, { time: 180000, maxMatches: 1, errors: ['time'] })
-            let description = descReplies.first().content
-            if (description === 'cancel') {
-                msg.author.send('Cancelled.')
-                return
+            let description = ''
+            while (!description) {
+                let descReplies = await dm.awaitMessages(filter, { time: 180000, maxMatches: 1, errors: ['time'] })
+                let reply = descReplies.first()
+                if (reply.attachments.size) {
+                    dm.send('You can\'t have attachments in the description. Try again:')
+                    continue
+                } else {
+                    description = reply.content
+                    if (description === 'cancel') {
+                        msg.author.send('Cancelled.')
+                        return
+                    }
+                }   
             }
 
             msg.author.send('Now, enter your spoiler.')
             let spoilerReplies = await dm.awaitMessages(filter, { time: 180000, maxMatches: 1, errors: ['time'] })
-            let spoiler = spoilerReplies.first().content
+            let reply = spoilerReplies.first()
+            let spoiler = reply.content
+            reply.attachments.forEach(attachment => {
+                spoiler += '\n' + attachment.url
+            })
             if (spoiler === 'cancel') {
                 msg.author.send('Cancelled.')
                 return
