@@ -87,7 +87,7 @@ function star (r: Discord.MessageReaction, usr: Discord.User) {
             },
             description: r.message.content,
             image: {
-                url: r.message.attachments.first().url
+                url: r.message.attachments.first() ? r.message.attachments.first().url : null
             },
             footer: {
                 text: r.message.createdAt.toLocaleString()
