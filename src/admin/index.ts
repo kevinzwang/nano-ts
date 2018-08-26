@@ -87,25 +87,23 @@ function star (r: Discord.MessageReaction, usr: Discord.User) {
         image = r.message.embeds[0].url
     }
 
-    chan.send(`https://discordapp.com/channels/${r.message.guild.id}/${r.message.channel.id}/${r.message.id}`)
-        .then(() => {
-            chan.send({
-                embed: {
-                    color: 0xfdc130,
-                    author: {
-                        name: `${r.message.author.tag} in #${(r.message.channel as Discord.TextChannel).name}`,
-                        icon_url: r.message.author.displayAvatarURL
-                    },
-                    description: r.message.content,
-                    image: {
-                        url: image
-                    },
-                    footer: {
-                        text: `${r.message.createdAt.toLocaleString()})`
-                    }
-                }
-            })
-        })
+    chan.send({
+        embed: {
+            color: 0xfdc130,
+            author: {
+                name: `${r.message.author.tag} in #${(r.message.channel as Discord.TextChannel).name}`,
+                icon_url: r.message.author.displayAvatarURL,
+                url: `https://discordapp.com/channels/${r.message.guild.id}/${r.message.channel.id}/${r.message.id}`
+            },
+            description: r.message.content,
+            image: {
+                url: image
+            },
+            footer: {
+                text: `${r.message.createdAt.toLocaleString()}`
+            }
+        }
+    })
 }
 
 client.login(config.getMainToken());
