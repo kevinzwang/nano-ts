@@ -67,7 +67,7 @@ function star (r: Discord.MessageReaction, usr: Discord.User) {
         return
     }
 
-    if (r.message.embeds.length) {
+    if (r.message.embeds.length && r.message.embeds[0].type === 'rich') {
         r.message.channel.send(`${usr}, unfortunately I can't embed embeds. What you can do is take a screenshot and star that.`)
         return
     }
@@ -76,24 +76,36 @@ function star (r: Discord.MessageReaction, usr: Discord.User) {
         return
     }
 
-    let chan = r.message.guild.channels.find('name', starChannel) as Discord.TextChannel
+    let chan = r.message.guild.channels.find(val => val.name === starChannel) as Discord.TextChannel
 
-    chan.send({
-        embed: {
-            color: 0xfdc130,
-            author: {
-                name: `${r.message.author.tag} in #${(r.message.channel as Discord.TextChannel).name}`,
-                icon_url: r.message.author.displayAvatarURL
-            },
-            description: r.message.content,
-            image: {
-                url: r.message.attachments.first() ? r.message.attachments.first().url : null
-            },
-            footer: {
-                text: r.message.createdAt.toLocaleString()
-            }
-        }
-    })
+    let image: string | null = null
+    
+    let firstAttachment = r.message.attachments.first()
+    if (firstAttachment) {
+        image = firstAttachment.url
+    } else if (r.message.embeds.length == 1 && r.message.embeds[0].type === 'image') {
+        image = r.message.embeds[0].url
+    }
+
+    chan.send(`https://discordapp.com/channels/${r.message.guild.id}/${r.message.channel.id}/${r.message.id}`)
+        .then(() => {
+            chan.send({
+                embed: {
+                    color: 0xfdc130,
+                    author: {
+                        name: `${r.message.author.tag} in #${(r.message.channel as Discord.TextChannel).name}`,
+                        icon_url: r.message.author.displayAvatarURL
+                    },
+                    description: r.message.content,
+                    image: {
+                        url: image
+                    },
+                    footer: {
+                        text: `${r.message.createdAt.toLocaleString()})`
+                    }
+                }
+            })
+        })
 }
 
 client.login(config.getMainToken());
