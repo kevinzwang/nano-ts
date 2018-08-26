@@ -8,3 +8,19 @@ export interface GuildMessage extends Message {
 export interface CommandGuildMessage extends CommandMessage {
     channel: TextChannel
 }
+
+export interface RawEvent {
+    t: string
+    s: number
+    op: number
+    d: {
+        user_id: string
+        message_id: string
+        emoji: {
+            name: string
+            id: any
+            animated: boolean
+        }
+        channel_id: string
+    }
+}

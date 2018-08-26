@@ -81,7 +81,7 @@ First, enter a short, non-spoiler description for your message`)
                     name: msg.author.tag,
                     icon_url: msg.author.displayAvatarURL
                 },
-                description: '__Spoilers about:__ ' + description,
+                description: '__Spoilers about__: ' + description,
                 color: this.embedColor,
                 footer: {
                     text: `For spoilers to work, you need to block ${helper.tag}.`
