@@ -99,9 +99,7 @@ function star (r: Discord.MessageReaction, usr: Discord.User) {
             image: {
                 url: image
             },
-            footer: {
-                text: `${r.message.createdAt.toLocaleString()}`
-            }
+            timestamp: r.message.createdTimestamp
         }
     })
 }
