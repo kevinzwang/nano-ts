@@ -1,7 +1,9 @@
 {
-    "token": "your token here",
+    "mainToken": "your token here",
+    "helperToken": "your token here",
     "ownerID": "your id here",
-    "supportServer": "server invite here (optional)",
+    "supportServer": "server invite (optional)",
+    "github": "link to repo (optional)",
     "guilds": {
         "global": {
             "prefix": "!"
