@@ -8,8 +8,6 @@ interface ConfigFile {
     ownerID: string
     supportServer?: string
     github?: string
-    adminGuildID?: string
-    starChannel?: string
     guilds: {
         global:  {
             prefix: string
@@ -62,14 +60,6 @@ export function getSupportServer(): string | undefined {
 
 export function getGithub(): string | undefined {
     return readConfig().github
-}
-
-export function getAdminGuild(): string | undefined {
-    return readConfig().adminGuildID
-}
-
-export function getStarChannel(): string | undefined {
-    return readConfig().starChannel
 }
 
 export function setPrefix(guild: string, prefix: string | null) {
