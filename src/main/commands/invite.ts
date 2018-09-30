@@ -12,14 +12,18 @@ export class InviteCommand extends Command {
         })
     }
     run(msg: CommandMessage): any {
+
         this.client.generateInvite().then(inv => {
+            let handler = (resp: ProcessEvent) => {
+                if (resp.type === 'INVITE_RESPONSE') {
+                    msg.channel.send(`Main: <${inv}>\nHelper: <${(<InviteResponse>resp.data).invite}>`)
+                    process.removeListener('message', handler)
+                }
+            }
+
             if (process) {
                 (<any> process).send({ type: 'INVITE_REQUEST' })
-                process.once('message', (resp: ProcessEvent) => {
-                    if (resp.type === 'INVITE_RESPONSE') {
-                        msg.channel.send(`Main: <${inv}>\nHelper: <${(<InviteResponse>resp.data).invite}>`)
-                    }
-                })
+                process.on('message', handler)
             } else {
                 msg.channel.send(`<${inv}>`)
             }

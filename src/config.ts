@@ -4,7 +4,6 @@ import * as path from 'path'
 interface ConfigFile {
     mainToken: string
     helperToken: string
-    helperID: string
     ownerID: string
     supportServer?: string
     github?: string
@@ -40,10 +39,6 @@ export function getMainToken(): string {
 
 export function getHelperToken(): string {
     return readConfig().helperToken
-}
-
-export function getHelperID(): string {
-    return readConfig().helperID
 }
 
 export function getOwner(): string {

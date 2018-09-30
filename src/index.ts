@@ -10,13 +10,13 @@ const main = cp.fork(mainPath)
 const helper = cp.fork(helperPath)
 
 main.on('message', (msg: ProcessEvent) => {
-    if (msg.type === 'SPOILER' || msg.type === 'INVITE_REQUEST') {
+    if (msg.type === 'SPOILER' || msg.type === 'INVITE_REQUEST' || msg.type === 'ID_REQUEST') {
         helper.send(msg)
     }
 })
 
 helper.on('message', (msg: ProcessEvent) => {
-    if (msg.type === 'INVITE_RESPONSE') {
+    if (msg.type === 'INVITE_RESPONSE' || msg.type === 'ID_RESPONSE') {
         main.send(msg)
     }
 })

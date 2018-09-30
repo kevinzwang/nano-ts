@@ -77,6 +77,9 @@ process.on('message', (msg: ProcessEvent) => {
         case 'INVITE_REQUEST':
             replyInvite()
             break
+        case 'ID_REQUEST':
+            replyID()
+            break
     }
 })
 
@@ -97,6 +100,21 @@ function replyInvite() {
                 }
             })
         })
+    }
+}
+
+function replyID() {
+    if (client.user) {
+        if (process) {
+            (<any> process).send({ 
+                type: 'ID_RESPONSE',
+                data: {
+                    id: client.user.id
+                }
+            })
+        }
+    } else {
+        setTimeout(replyID, 50)
     }
 }
 

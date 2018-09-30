@@ -1,12 +1,12 @@
-import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
-import { Message, TextChannel } from 'discord.js';
+import { Command, CommandoClient } from 'discord.js-commando'
+import { Message } from 'discord.js';
 
-import { ProcessEvent } from '../../interfaces/process'
-import { getHelperID } from '../../config'
+import { ProcessEvent, IDResponse } from '../../interfaces/process'
 import { CommandGuildMessage } from '../../interfaces/discord';
 
 export class SpoilerCommand extends Command {
     readonly embedColor: number = 0x9544ff
+    helperID: string = ''
 
     constructor(client: CommandoClient) {
         super (client, {
@@ -24,19 +24,25 @@ export class SpoilerCommand extends Command {
                 duration: 60
             }
         })
+        if (process) {
+            (<any> process).send({ type: 'ID_REQUEST' })
+            process.once('message', (resp: ProcessEvent) => {
+                if (resp.type == 'ID_RESPONSE') {
+                    this.helperID = (<IDResponse>resp.data).id
+                } 
+            })
+        }
     }
+
     async run(msg: CommandGuildMessage): Promise<any> {
-        let helper = await this.client.fetchUser(getHelperID())
+        let helper = await this.client.fetchUser(this.helperID)
 
         if (!msg.guild.members.some(usr => usr.id == helper.id)) {
             msg.channel.send(`You must add ${helper.tag} for this command to work. Use the invite command to get invite links.`)
             return
         }
 
-        msg.author.send(`Spoiler message to #${msg.channel.name} in server ${msg.guild.name}.
-Type \`cancel\` any time to cancel this command.
-
-First, enter a short, non-spoiler description for your message`)
+        msg.author.send(`Spoiler message to #${msg.channel.name} in server ${msg.guild.name}.\nType \`cancel\` any time to cancel this command.\n\nFirst, enter a short, non-spoiler description for your message`)
             .then(() =>{
                 msg.reply('Sent you a DM with information.')
             })

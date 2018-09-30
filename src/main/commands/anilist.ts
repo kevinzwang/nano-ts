@@ -82,12 +82,12 @@ Planning:   ${al.stats.animeStatusDistribution[1].amount}`
                     fields: [
                         {
                             name: "Days Watched",
-                            value: al.stats.watchedTime ? '' + (Math.floor(al.stats.watchedTime/144) / 10) : '¯\\_(ツ)_/¯', // weird way to have one digit after decimal point from minutes to days
+                            value: al.stats.watchedTime ? (al.stats.watchedTime / 1440).toFixed(1) : '¯\\_(ツ)_/¯',
                             inline: true
                         },
                         {
                             name: "Mean Score",
-                            value: al.stats.animeListScores && al.stats.animeListScores.meanScore ? al.stats.animeListScores.meanScore + '/100' : '¯\\_(ツ)_/¯',
+                            value: al.stats.animeListScores && al.stats.animeListScores.meanScore ? '' + (al.stats.animeListScores.meanScore / 10) : '¯\\_(ツ)_/¯',
                             inline: true
                         },
                         {
