@@ -5,11 +5,9 @@ import { ProcessEvent } from './interfaces/process'
 
 const mainPath = path.join(__dirname, 'main/index.js')
 const helperPath = path.join(__dirname, 'helper/index.js')
-const adminPath = path.join(__dirname, 'admin/index.js')
 
 const main = cp.fork(mainPath)
 const helper = cp.fork(helperPath)
-const admin = cp.fork(adminPath)
 
 main.on('message', (msg: ProcessEvent) => {
     if (msg.type === 'SPOILER' || msg.type === 'INVITE_REQUEST') {
@@ -28,5 +26,4 @@ main.on('exit', () => {
         type: 'EXIT'
     }
     helper.send(msg)
-    admin.send(msg)
 })

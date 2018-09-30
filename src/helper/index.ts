@@ -125,7 +125,6 @@ async function updateEthereum() {
             }
         })
     } catch (err) {
-        console.log(err)
         client.user.setPresence({
             game: {
                 name: 'ETH - $??? ???'

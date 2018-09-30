@@ -71,7 +71,6 @@ async function updateBitcoin() {
             }
         })
     } catch (err) {
-        console.log(err)
         client.user.setPresence({
             game: {
                 name: 'BTC - $??? ?'
