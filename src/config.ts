@@ -4,9 +4,10 @@ import * as path from 'path'
 interface ConfigFile {
     mainToken: string
     helperToken: string
-    ownerID: string
+    ownerId: string
     supportServer?: string
     github?: string
+    tbaApiKey?: string
     guilds: {
         global:  {
             prefix: string
@@ -42,7 +43,7 @@ export function getHelperToken(): string {
 }
 
 export function getOwner(): string {
-    return readConfig().ownerID
+    return readConfig().ownerId
 }
 
 export function getPrefix(guild: string): string | null | undefined {
@@ -55,6 +56,10 @@ export function getSupportServer(): string | undefined {
 
 export function getGithub(): string | undefined {
     return readConfig().github
+}
+
+export function getTbaApiKey(): string | undefined {
+    return readConfig().tbaApiKey
 }
 
 export function setPrefix(guild: string, prefix: string | null) {

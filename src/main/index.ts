@@ -16,6 +16,7 @@ client.registry
         ['fun', 'Fun'],
         ['weeb', 'Weeb'],
         ['misc', 'Miscellaneous'],
+        ['frc', 'FIRST Robotics Competition'],
     ])
     .registerDefaults()
     .registerCommandsIn(path.join(__dirname, 'commands'));
