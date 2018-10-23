@@ -44,61 +44,59 @@ export class TeamCommand extends Command {
                     return msg.reply('arguments must be positive integers. See the help page for details.')
                 }
 
-                return axios.get(`https://www.thebluealliance.com/api/v3/team/frc${number}?X-TBA-Auth-Key=${config.getTbaApiKey()}`).then(resp => {
-                    return resp.data as Team
-                }).then(data => {
-                    if (data.Errors) {
-                        return msg.reply(`could not find team ${number}.`)
-                    }
+                let teamResp = await axios.get(`https://www.thebluealliance.com/api/v3/team/frc${number}?X-TBA-Auth-Key=${config.getTbaApiKey()}`)
+                let teamData = teamResp.data as Team
+                if (teamData.Errors) {
+                    return msg.reply(`could not find team ${number}.`)
+                }
 
-                    let latestHomeChamp: number = 0
-                    let latestHomeChampLocation: string = 'none'
+                let latestHomeChamp: number = 0
+                let latestHomeChampLocation: string = 'none'
 
-                    if (data.home_championship) {
-                        for (let year in data.home_championship) {
-                            let y = parseInt(year)
-                            if (y > latestHomeChamp) {
-                                latestHomeChamp = y
-                                latestHomeChampLocation = data.home_championship[year]
-                            }
+                if (teamData.home_championship) {
+                    for (let year in teamData.home_championship) {
+                        let y = parseInt(year)
+                        if (y > latestHomeChamp) {
+                            latestHomeChamp = y
+                            latestHomeChampLocation = teamData.home_championship[year]
                         }
                     }
+                }
 
-                    return msg.channel.send({
-                        embed: {
-                            title: `Team ${data.team_number}: ${data.nickname}`,
-                            url: `https://www.thebluealliance.com/team/${number}`,
-                            color: this.embedColor,
-                            thumbnail: {
-                                url: `https://frcavatars.herokuapp.com/get_image?team=${number}`
+                return msg.channel.send({
+                    embed: {
+                        title: `Team ${teamData.team_number}: ${teamData.nickname}`,
+                        url: `https://www.thebluealliance.com/team/${number}`,
+                        color: this.embedColor,
+                        thumbnail: {
+                            url: `https://frcavatars.herokuapp.com/get_image?team=${number}`
+                        },
+                        fields: [
+                            {
+                                name: 'Location',
+                                value: teamData.city + ', ' + teamData.state_prov + ', ' + teamData.country,
+                                inline: true
                             },
-                            fields: [
-                                {
-                                    name: 'Location',
-                                    value: data.city + ', ' + data.state_prov + ', ' + data.country,
-                                    inline: true
-                                },
-                                {
-                                    name: 'Rookie Year',
-                                    value: '' + data.rookie_year,
-                                    inline: true
-                                },
-                                {
-                                    name: 'Home Championship',
-                                    value: latestHomeChampLocation,
-                                    inline: true
-                                },
-                                {
-                                    name: 'Website',
-                                    value: data.website ? data.website : 'none'
-                                }
-                            ],
-                            footer: {
-                                icon_url: 'https://www.thebluealliance.com/images/logo_circle_512.png',
-                                text: 'Fetched from TBA'
+                            {
+                                name: 'Rookie Year',
+                                value: '' + teamData.rookie_year,
+                                inline: true
+                            },
+                            {
+                                name: 'Home Championship',
+                                value: latestHomeChampLocation,
+                                inline: true
+                            },
+                            {
+                                name: 'Website',
+                                value: teamData.website ? teamData.website : 'none'
                             }
+                        ],
+                        footer: {
+                            icon_url: 'https://www.thebluealliance.com/images/logo_circle_512.png',
+                            text: 'Fetched from TBA'
                         }
-                    })
+                    }
                 })
             } else {
                 let number = this.toPosInt(args[0])

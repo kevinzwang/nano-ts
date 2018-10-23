@@ -60,7 +60,7 @@ client.on('message', (msg) => {
 })
 
 client.on('error', (err) => {
-    console.log(err)
+    console.log(new Date() + ' - uncaught error from nano')
 })
 
 client.login(config.getHelperToken());

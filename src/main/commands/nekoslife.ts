@@ -38,7 +38,7 @@ export class FoxgirlCommand extends Command {
             name: 'foxgirl',
             group: 'weeb',
             memberName: 'foxgirl',
-            description: 'Shows a random catgirl image.',
+            description: 'Shows a random foxgirl image.',
             throttling: {
                 usages: 3,
                 duration: 10
