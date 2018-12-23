@@ -34,6 +34,9 @@ export class TeamCommand extends Command {
         })
     }
     async run(msg: CommandMessage, args: string[]): Promise<Message | Message[]> {
+        if (config.getTbaApiKey() == null) {
+            return msg.channel.send("This bot's owner did not setup an API key for TheBlueAlliance.")
+        }
         try {
             if (args.length < 1 || args.length > 2) {
                 return msg.reply('this command takes between 1 and 2 arguments. See the help page for details.')

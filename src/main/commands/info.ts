@@ -31,11 +31,11 @@ export class InfoCommand extends Command {
                     },
                     {
                         name: 'Dev Server',
-                        value: config.getSupportServer()
+                        value: config.getSupportServer() ? config.getSupportServer() : '¯\\_(ツ)_/¯'
                     },
                     {
                         name: 'Github',
-                        value: config.getGithub()
+                        value: config.getGithub() ? config.getGithub() : '¯\\_(ツ)_/¯'
                     }
                 ]
             }
