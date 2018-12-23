@@ -4,7 +4,8 @@
     "ownerId": "your id here",
     "supportServer": "server invite (optional)",
     "github": "link to repo (optional)",
-    "tbaApiKey": "api key here",
+    "tbaApiKey": "api key here (optional)",
+    "minecraftServerIp": "server IP here (optional)",
     "guilds": {
         "global": {
             "prefix": "!"

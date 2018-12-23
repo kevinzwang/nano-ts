@@ -8,6 +8,7 @@ interface ConfigFile {
     supportServer?: string
     github?: string
     tbaApiKey?: string
+    minecraftServerIp?: string
     guilds: {
         global:  {
             prefix: string
@@ -60,6 +61,10 @@ export function getGithub(): string | undefined {
 
 export function getTbaApiKey(): string | undefined {
     return readConfig().tbaApiKey
+}
+
+export function getMcServer(): string | undefined {
+    return readConfig().minecraftServerIp
 }
 
 export function setPrefix(guild: string, prefix: string | null) {
