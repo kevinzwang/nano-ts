@@ -2,8 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 interface ConfigFile {
-    mainToken: string
-    helperToken: string
+    token: string
     ownerId: string
     supportServer?: string
     github?: string
@@ -35,12 +34,8 @@ function writeConfig(data: string | ConfigFile) {
     fs.writeFileSync(configPath, data, 'utf8')
 }
 
-export function getMainToken(): string {
-    return readConfig().mainToken
-}
-
-export function getHelperToken(): string {
-    return readConfig().helperToken
+export function getBotToken(): string {
+    return readConfig().token
 }
 
 export function getOwner(): string {

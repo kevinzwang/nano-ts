@@ -1,6 +1,5 @@
 import * as Commando from 'discord.js-commando'
 import * as path from 'path'
-import axios from 'axios'
 
 import * as config from './config';
 
@@ -36,7 +35,7 @@ client.on('error', (err) => {
     console.log(new Date() + ' - uncaught error from bot')
 })
 
-client.login(config.getMainToken());
+client.login(config.getBotToken());
 
 export function exit() {
     client.destroy()
