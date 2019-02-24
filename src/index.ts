@@ -37,7 +37,7 @@ client.on('commandPrefixChange', (guild, prefix) => {
 })
 
 client.on('error', (err) => {
-    console.log(new Date() + ' - uncaught error from marvin')
+    console.log(new Date() + ' - uncaught error from bot')
 })
 
 client.login(config.getMainToken());

@@ -15,9 +15,9 @@ export class InfoCommand extends Command {
     run(msg: CommandMessage): Promise<Message | Message[]> {
         return msg.channel.send({
             embed: {
-                title: 'About Marvin',
+                title: 'About Nano',
                 color: 0xffffff,
-                description: 'Marvin is an all-purpose Discord bot written in Typescript using the Discord.js library.',
+                description: 'Nano is an all-purpose Discord bot written in Typescript using the Discord.js library.',
                 fields: [
                     {
                         name: 'Owner',

@@ -1,5 +1,5 @@
 {
-  "name": "marvin-ts",
+  "name": "nano-ts",
   "version": "1.0.0-beta.0",
   "description": "Kevin's Discord bot, this time written in Typescript with the Discord.js lib.",
   "main": "dist/index.js",
