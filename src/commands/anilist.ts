@@ -1,8 +1,8 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 import { Message } from 'discord.js';
 
-import { animeListQuery } from '../../constants/anilist'
-import { AnimeList } from "../../interfaces/anilist";
+import { animeListQuery } from '../constants/anilist'
+import { AnimeList } from "../interfaces/anilist";
 import axios from 'axios'
 
 export class AnilistCommand extends Command {

@@ -1,11 +1,11 @@
 {
-    "mainToken": "your token here",
-    "helperToken": "your token here",
-    "ownerId": "your id here",
+    "mainToken": "MzMzMjk3NDQyODg5OTI0NjA4.DwFiRA.9R3mNhzj_b1w8dSMoS5DFPp-9lE",
+    "helperToken": "NDY5OTA0MzE3NTc5NTI2MTY0.DwFiYQ.L3rQ4XaxR80k5KEUeKQZQYMTNqA",
+    "ownerId": "312418351844425731",
     "supportServer": "server invite (optional)",
     "github": "link to repo (optional)",
     "tbaApiKey": "api key here (optional)",
-    "minecraftServerIp": "server IP here (optional)",
+    "minecraftServerIp": "34.214.88.251",
     "guilds": {
         "global": {
             "prefix": "!"

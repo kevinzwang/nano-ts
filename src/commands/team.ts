@@ -2,9 +2,9 @@ import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 import { Message } from 'discord.js';
 import axios from 'axios'
 
-import * as config from '../../config';
-import { Team, Award, Event, EventStatus } from '../../interfaces/tba';
-import { blueBanners } from '../../constants/tba';
+import * as config from '../config';
+import { Team, Award, Event, EventStatus } from '../interfaces/tba';
+import { blueBanners } from '../constants/tba';
 
 export class TeamCommand extends Command {
     readonly embedColor = 0x3f51b5

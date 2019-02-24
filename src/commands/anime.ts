@@ -7,8 +7,8 @@ const entities = new XmlEntities()
 const TurndownService = require('turndown')
 const turndownService = new TurndownService()
 
-import { searchQuery, animeQuery } from '../../constants/anilist'
-import { SearchPage, Anime } from '../../interfaces/anime'
+import { searchQuery, animeQuery } from '../constants/anilist'
+import { SearchPage, Anime } from '../interfaces/anime'
 
 export class AnimeCommand extends Command {
     readonly perPage: number = 8

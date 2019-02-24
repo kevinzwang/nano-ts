@@ -2,8 +2,8 @@ import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 import { Message } from 'discord.js';
 import axios from 'axios'
 
-import * as config from '../../config';
-import { ServerInfo } from '../../interfaces/minecraft'
+import * as config from '../config';
+import { ServerInfo } from '../interfaces/minecraft'
 
 export class MinecraftCommand extends Command {
     readonly onlineColor = 0x00FF00
