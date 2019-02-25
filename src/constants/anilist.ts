@@ -1,4 +1,4 @@
-export const searchQuery = `
+export const animeSearchQuery = `
 query SearchAnime ($search: String, $page: Int, $perPage: Int) {
     Page (page: $page, perPage: $perPage) {
         pageInfo {
@@ -45,7 +45,7 @@ query AnimeResult ($id: Int) {
 `
 
 export const animeListQuery = `
-query GetAnilist ($name: String) {
+query GetAnimeList ($name: String) {
     User (name: $name) {
         name
         avatar {
@@ -61,6 +61,74 @@ query GetAnilist ($name: String) {
                 meanScore
             }
             animeStatusDistribution {
+                status
+                amount
+            }
+        }
+    }
+}
+`
+
+export const mangaSearchQuery = `
+query SearchManga ($search: String, $page: Int, $perPage: Int) {
+    Page (page: $page, perPage: $perPage) {
+        pageInfo {
+            total
+            hasNextPage
+            currentPage
+            lastPage
+        }
+        media(search: $search, type: MANGA) {
+            title {
+                userPreferred
+            }
+      		format
+            siteUrl
+            id
+        }
+    }
+}
+`
+export const mangaQuery = `
+query MangaResult ($id: Int) {
+    Media (id: $id) {
+        title {
+            userPreferred
+        }
+        siteUrl
+        description
+        format
+        status
+        meanScore
+        rankings {
+            rank
+            allTime
+        }
+        genres
+        coverImage {
+            large
+        }
+    }
+}
+`
+
+export const mangaListQuery = `
+query GetMangaList ($name: String) {
+    User (name: $name) {
+        name
+        avatar {
+            large
+        }
+        siteUrl
+        options {
+            profileColor
+        }
+        stats {
+            chaptersRead
+            mangaListScores {
+                meanScore
+            }
+            mangaStatusDistribution {
                 status
                 amount
             }

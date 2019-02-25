@@ -7,22 +7,22 @@ const entities = new XmlEntities()
 const TurndownService = require('turndown')
 const turndownService = new TurndownService()
 
-import { animeSearchQuery, animeQuery } from '../constants/anilist'
-import { AnimeSearchPage, Anime } from '../interfaces/anilist'
+import { mangaSearchQuery, mangaQuery } from '../constants/anilist'
+import { MangaSearchPage, Manga } from '../interfaces/anilist'
 
-export class AnimeCommand extends Command {
+export class MangaCommand extends Command {
     readonly perPage: number = 8
     readonly embedColor: number = 0x44b5f0
     readonly maxDescLen: number = 256
 
     constructor(client: CommandoClient) {
         super(client, {
-            name: 'anime',
+            name: 'manga',
             group: 'weeb',
-            memberName: 'anime',
-            description: 'Gives quick info about the searched anime.',
-            aliases: ['a'],
-            examples: ['anime kimi na wa'],
+            memberName: 'manga',
+            description: 'Gives quick info about the searched manga.',
+            aliases: ['m'],
+            examples: ['manga kaguya sama'],
             throttling: {
                 usages: 3,
                 duration: 10
@@ -34,11 +34,11 @@ export class AnimeCommand extends Command {
         let prevSearch: Message | undefined
 
         while (true) {
-            let page = await this.searchAnime(args, pageCount)
+            let page = await this.searchManga(args, pageCount)
             if (page.pageInfo.total == 0) {
-                return msg.channel.send('Here I am, brain the size of a planet and they ask me to search for anime that doesn\'t exist.')
+                return msg.channel.send('Here I am, brain the size of a planet and they ask me to search for manga that doesn\'t exist.')
             } else if (page.pageInfo.total == 1) {
-                return this.sendAnime(msg.channel, page.media[0].id)
+                return this.sendManga(msg.channel, page.media[0].id)
             } else if (page.pageInfo.currentPage > page.pageInfo.lastPage) {
                 (<Message>prevSearch).delete()
                 return msg.reply('No more pages.')
@@ -77,17 +77,17 @@ export class AnimeCommand extends Command {
 
                 prevSearch.delete()
                 let chosenId = page.media[Number(chosen) - 1].id
-                return this.sendAnime(msg.channel, chosenId)
+                return this.sendManga(msg.channel, chosenId)
             } catch (err) {
                 return msg.reply(`Took too long to choose for query "${args}"`)
             }
         }
     }
 
-    private searchAnime(search: string, page: number): Promise<AnimeSearchPage> {
+    private searchManga(search: string, page: number): Promise<MangaSearchPage> {
         return axios.post('https://graphql.anilist.co',
             {
-                query: animeSearchQuery,
+                query: mangaSearchQuery,
                 variables: {
                     perPage: this.perPage,
                     page: page,
@@ -95,14 +95,26 @@ export class AnimeCommand extends Command {
                 }
             }
         ).then(resp => {
-            return resp.data.data.Page as AnimeSearchPage
+            return resp.data.data.Page as MangaSearchPage
         })
     }
 
-    private sendSearch(channel: TextChannel | DMChannel | GroupDMChannel, page: AnimeSearchPage, search: string): Promise<Message | Message[]> {
+    private sendSearch(channel: TextChannel | DMChannel | GroupDMChannel, page: MangaSearchPage, search: string): Promise<Message | Message[]> {
         let results = ''
-        for (const [index, anime] of page.media.entries()) {
-            results += `${index + 1}. [${anime.title.userPreferred}](${anime.siteUrl})`
+        for (const [index, manga] of page.media.entries()) {
+            let format: string
+            switch(manga.format) {
+                case 'NOVEL':
+                    format = 'LN'
+                    break
+                case 'ONE_SHOT':
+                    format = 'ONE SHOT'
+                    break;
+                default:
+                    format = manga.format
+            }
+
+            results += `${index + 1}. [${manga.title.userPreferred} [${format}]](${manga.siteUrl})`
             if (index < this.perPage - 1) {
                 results += '\n'
             }
@@ -120,69 +132,37 @@ export class AnimeCommand extends Command {
         })
     }
 
-    private sendAnime(channel: TextChannel | DMChannel | GroupDMChannel, id: number): Promise<Message | Message[]> {
-        return this.queryAnime(id).then(a => {
-            let description: string = turndownService.turndown(entities.decode(a.description)).replace(/\s\s+/g, ' ');
+    private sendManga(channel: TextChannel | DMChannel | GroupDMChannel, id: number): Promise<Message | Message[]> {
+        return this.queryManga(id).then(m => {
+            let description: string = turndownService.turndown(entities.decode(m.description)).replace(/\s\s+/g, ' ');
             if (description.length > this.maxDescLen) {
                 description = description.substring(0, this.maxDescLen - 3) + '...'
             }
 
             let format: string
-            switch (a.format) {
-                case 'TV_SHORT':
-                    format = 'TV Short'
+            switch (m.format) {
+                case 'MANGA':
+                    format = 'Manga'
                     break
-                case 'MOVIE':
-                    format = 'Movie'
+                case 'NOVEL':
+                    format = 'Light Novel'
                     break
-                case 'SPECIAL':
-                    format = 'Special'
-                    break
-                case 'MUSIC':
-                    format = 'Music'
-                    break
+                case 'ONE_SHOT':
+                    format = 'One Shot'
+                    break;
                 default:
-                    format = a.format
+                    format = m.format
             }
 
-            let status: string
-            if (a.nextAiringEpisode) {
-                if (a.nextAiringEpisode.episode === 1) {
-                    status = 'Primieres:'
-                } else {
-                    status = `Ep ${a.nextAiringEpisode.episode}:`
-                }
-
-                // prevCounted used so that things like 4d 0h 2m will be displayed
-                let prevCounted = false
-                let remainder = a.nextAiringEpisode.timeUntilAiring
-
-                // days
-                if (Math.floor(remainder/86400) != 0) {
-                    status += ` ${Math.floor(remainder/86400)}d`
-                    remainder %= 86400
-			        prevCounted = true
-                }
-
-                // hours
-                if (Math.floor(remainder/3600) != 0 || prevCounted) {
-                    status += ` ${Math.floor(remainder/3600)}h`
-                    remainder %= 3600
-                    prevCounted = true
-                }
-
-                status += ` ${Math.floor(remainder/60)}m`
-            } else {
-                function toTitleCase(str: string): string {
-                    return str.replace(/\w\S*/g, function(txt){
-                        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-                    });
-                }
-                status = toTitleCase(a.status.replace(/_/g, ' '))
+            function toTitleCase(str: string): string {
+                return str.replace(/\w\S*/g, function(txt){
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
             }
+            let status = toTitleCase(m.status.replace(/_/g, ' '))
 
             let allTimePop = 0
-            for (let r of a.rankings) {
+            for (let r of m.rankings) {
                 if (r.allTime) {
                     allTimePop = r.rank
                     break
@@ -190,21 +170,21 @@ export class AnimeCommand extends Command {
             }
 
             let genres = ''
-            for (let i = 0; i < a.genres.length; i++) {
-                genres += `[${a.genres[i]}](https://anilist.co/search/anime?includedGenres=${encodeURIComponent(a.genres[i])})`
-                if (i < a.genres.length - 1) {
+            for (let i = 0; i < m.genres.length; i++) {
+                genres += `[${m.genres[i]}](https://anilist.co/search/manga?includedGenres=${encodeURIComponent(m.genres[i])})`
+                if (i < m.genres.length - 1) {
                     genres += '  |  '
                 }
             }
 
             return channel.send({
                 embed: {
-                    url: a.siteUrl,
-                    title: a.title.userPreferred,
+                    url: m.siteUrl,
+                    title: m.title.userPreferred,
                     color: this.embedColor,
                     description: description,
                     thumbnail: {
-                        url: a.coverImage.large
+                        url: m.coverImage.large
                     },
                     fields: [
                         {
@@ -219,7 +199,7 @@ export class AnimeCommand extends Command {
                         },
                         {
                             name: 'Score',
-                            value: a.meanScore ? a.meanScore + '%' : '¯\\_(ツ)_/¯',
+                            value: m.meanScore ? m.meanScore + '%' : '¯\\_(ツ)_/¯',
                             inline: true
                         },
                         {
@@ -242,16 +222,16 @@ export class AnimeCommand extends Command {
         })
     }
 
-    private queryAnime(id: number): Promise<Anime> {
+    private queryManga(id: number): Promise<Manga> {
         return axios.post('https://graphql.anilist.co',
             {
-                query: animeQuery,
+                query: mangaQuery,
                 variables: {
                     id: id
                 }
             }
         ).then(resp => {
-            return resp.data.data.Media as Anime
+            return resp.data.data.Media as Manga
         })
     }
 }
