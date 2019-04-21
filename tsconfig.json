@@ -11,7 +11,8 @@
             "*": [
                 "node_modules/*"
             ]
-        }
+        },
+        "strictNullChecks": false
     },
     "include": [
         "src/**/*"

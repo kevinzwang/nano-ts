@@ -5,7 +5,7 @@ import * as config from './config';
 
 const client = new Commando.CommandoClient({
     owner: config.getOwner(),
-    commandPrefix: <string>config.getPrefix(),
+    commandPrefix: config.getPrefix(),
     invite: config.getSupportServer(),
     unknownCommandResponse: false
 })
