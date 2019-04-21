@@ -5,7 +5,7 @@ import * as config from './config';
 
 const client = new Commando.CommandoClient({
     owner: config.getOwner(),
-    commandPrefix: <string>config.getPrefix('global'),
+    commandPrefix: <string>config.getPrefix(),
     invite: config.getSupportServer(),
     unknownCommandResponse: false
 })
@@ -24,14 +24,7 @@ client.on('ready', () => {
     console.log(`Bot logged in as ${client.user.tag}!`);
 });
 
-client.on('commandPrefixChange', (guild, prefix) => {
-    if (guild || prefix) {
-        let id = guild ? guild.id : 'global'
-        config.setPrefix(id, prefix)
-    }
-})
-
-client.on('error', (err) => {
+client.on('error', () => {
     console.log(new Date() + ' - uncaught error from bot')
 })
 

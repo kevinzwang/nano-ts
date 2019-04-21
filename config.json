@@ -5,9 +5,5 @@
     "github": "link to repo (optional)",
     "tbaApiKey": "api key here (optional)",
     "minecraftServerIp": "server IP here (optional)",
-    "guilds": {
-        "global": {
-            "prefix": "!"
-        }
-    }
+    "prefix": "!"
 }

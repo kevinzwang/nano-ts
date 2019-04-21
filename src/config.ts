@@ -8,16 +8,7 @@ interface ConfigFile {
     github?: string
     tbaApiKey?: string
     minecraftServerIp?: string
-    guilds: {
-        global:  {
-            prefix: string
-        }
-        [guild: string]: ServerConfig
-    }
-}
-
-interface ServerConfig {
-    prefix?: string | null
+    prefix: string    
 }
 
 var configPath = path.join(__dirname, '../config.json')
@@ -42,8 +33,8 @@ export function getOwner(): string {
     return readConfig().ownerId
 }
 
-export function getPrefix(guild: string): string | null | undefined {
-    return readConfig().guilds[guild].prefix
+export function getPrefix(): string  {
+    return readConfig().prefix
 }
 
 export function getSupportServer(): string | undefined {
@@ -60,16 +51,4 @@ export function getTbaApiKey(): string | undefined {
 
 export function getMcServer(): string | undefined {
     return readConfig().minecraftServerIp
-}
-
-export function setPrefix(guild: string, prefix: string | null) {
-    let cfg = readConfig()
-    
-    if (cfg.guilds[guild]) {
-        cfg.guilds[guild].prefix = prefix
-    } else {
-        cfg.guilds[guild] = {prefix: prefix}
-    }
-
-    writeConfig(cfg)
 }
