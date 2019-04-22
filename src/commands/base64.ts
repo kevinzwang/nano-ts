@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
-import { Message } from 'discord.js';
+import { Message } from 'discord.js'
 import { Base64 } from 'js-base64'
 
 export class EncodeCommand extends Command {

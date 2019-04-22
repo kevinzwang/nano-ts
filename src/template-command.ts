@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
-import { Message } from 'discord.js';
+import { Message } from 'discord.js'
 
 export class TemplateCommand extends Command {
     constructor(client: CommandoClient) {
