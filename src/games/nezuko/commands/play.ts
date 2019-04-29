@@ -202,8 +202,8 @@ export class PlayCommand extends Command {
         let endMsg = '__Final Scores:__'
         for (let u of origPlayers) {
             endMsg += `\n${u} - ${gamePoints[u.id]}`
-            addPoints(u, gamePoints[u.id])
-            setHighScore(u, gamePoints[u.id])
+            await addPoints(u, gamePoints[u.id])
+            await setHighScore(u, gamePoints[u.id])
         }
 
         this.currentGames.delete(msg.channel.id)
