@@ -5,5 +5,6 @@
     "github": "link to repo (optional)",
     "tbaApiKey": "api key here (optional)",
     "minecraftServerIp": "server IP here (optional)",
+    "game": "nezuko",
     "prefix": "!"
 }

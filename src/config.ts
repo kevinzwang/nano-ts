@@ -8,6 +8,7 @@ interface ConfigFile {
     github?: string
     tbaApiKey?: string
     minecraftServerIp?: string
+    game?: string
     prefix: string    
 }
 
@@ -16,13 +17,6 @@ var configPath = path.join(__dirname, '../config.json')
 function readConfig(): ConfigFile {
     let file = fs.readFileSync(configPath, 'utf8')
     return JSON.parse(file) as ConfigFile
-}
-
-function writeConfig(data: string | ConfigFile) {
-    if (typeof data !== 'string') {
-        data = JSON.stringify(data, null, 4)
-    }
-    fs.writeFileSync(configPath, data, 'utf8')
 }
 
 export function getBotToken(): string {
@@ -51,4 +45,8 @@ export function getTbaApiKey(): string | undefined {
 
 export function getMcServer(): string | undefined {
     return readConfig().minecraftServerIp
+}
+
+export function getGame(): string | undefined {
+    return readConfig().game
 }
