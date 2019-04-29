@@ -9,10 +9,12 @@ export class TemplateCommand extends Command {
             memberName: 'template',
             description: 'A template for commands.',
             ownerOnly: false, // optional
+            guildOnly: false, // optional
             aliases: [ // optional
                 'tmp',
                 'templ'
             ],
+            patterns: [/hello world/],
             examples: [ // optional
                 'template',
                 'template foo'
