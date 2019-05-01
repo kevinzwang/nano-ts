@@ -1,5 +1,7 @@
-# Nano
+# Nano Bot
 
-The Discord bot you know and love, now written in Typescript with the Discord.js library!
+My Discord bot, now written in Typescript using the Discord.js library!
 
-Was known as Marvin.
+Current Version - 2.0.0 (Nezuko)
+
+![profile](assets/nezuko.png)
