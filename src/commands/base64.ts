@@ -11,11 +11,18 @@ export class EncodeCommand extends Command {
             description: 'Base64 encoder.',
             examples: [
                 'encode your face'
-            ]
+            ],
+            args: [
+                {
+                    key: 'input',
+                    prompt: 'please specify the input to encode.',
+                    type: 'string'
+                }
+            ],
         })
     }
-    run(msg: CommandMessage, args: string): Promise<Message | Message[]> {
-        return msg.channel.send('```' + Base64.encode(args) + '```')
+    run(msg: CommandMessage, args: { input: string }): Promise<Message | Message[]> {
+        return msg.channel.send('```' + Base64.encode(args.input) + '```')
     }
 }
 
@@ -28,10 +35,17 @@ export class DecodeCommand extends Command {
             description: 'Base64 decoder.',
             examples: [
                 'decode eW91ciBmYWNl'
-            ]
+            ],
+            args: [
+                {
+                    key: 'input',
+                    prompt: 'please specify the input to decode.',
+                    type: 'string'
+                }
+            ],
         })
     }
-    run(msg: CommandMessage, args: string): Promise<Message | Message[]> {
-        return msg.channel.send('```' + Base64.decode(args) + '```')
+    run(msg: CommandMessage, args: { input: string }): Promise<Message | Message[]> {
+        return msg.channel.send('```' + Base64.decode(args.input) + '```')
     }
 }

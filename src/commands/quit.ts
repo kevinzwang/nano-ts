@@ -3,10 +3,7 @@ import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 import { exit } from '..'
 
 const exitMessages = [
-    'Grrrrrr!',
-    'Rawwrrrrr!',
-    'Mmmmpphhhh!',
-    'Gahhhhh!'
+    'bye'
 ]
 
 export class QuitCommand extends Command {
@@ -16,7 +13,7 @@ export class QuitCommand extends Command {
             group: 'util',
             memberName: 'quit',
             description: 'Shuts down the bot.',
-            aliases: ['exit', 'shutdown'],
+            aliases: ['exit', 'shutdown', 'q'],
             ownerOnly: true
         })
     }

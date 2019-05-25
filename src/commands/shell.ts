@@ -14,12 +14,19 @@ export class ShellCommand extends Command {
             examples: [
                 'shell ls',
                 'shell pwd'
-            ]
+            ],
+            args: [
+                {
+                    key: 'command',
+                    prompt: 'please specify the command to execute.',
+                    type: 'string'
+                }
+            ],
         })
     }
-    run(msg: CommandMessage, args: string): Promise<Message | Message[]> {
+    run(msg: CommandMessage, args: { command: string }): Promise<Message | Message[]> {
         return new Promise<Message | Message[]>((resolve, reject) => {
-            exec(args, (err, stdout, stderr) => {
+            exec(args.command, (err, stdout, stderr) => {
                 if (err) {
                     reject(msg.channel.send('```' + stderr + '```'))
                 } else {

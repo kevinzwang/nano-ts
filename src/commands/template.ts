@@ -19,13 +19,21 @@ export class TemplateCommand extends Command {
                 'template',
                 'template foo'
             ],
+            argsType: 'single', // optional
+            args: [ // optional
+                {
+                    key: 'arg',
+                    prompt: 'please specify an argument.',
+                    type: 'string'
+                }
+            ],
             throttling: { // optional
                 usages: 3,
                 duration: 10
             }
         })
     }
-    run(msg: CommandMessage, args: string | object | string[], fromPattern: boolean): Promise<Message | Message[]> {
+    run(msg: CommandMessage, args: string | string[] | { arg: string }, fromPattern: boolean): Promise<Message | Message[]> {
         return new Promise<Message | Message[]>(() => ({msg, args, fromPattern}))
     }
 }

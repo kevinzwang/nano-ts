@@ -18,18 +18,25 @@ export class AnilistCommand extends Command {
             examples: [
                 'anilist watashi',
             ],
+            args: [
+                {
+                    key: 'user',
+                    prompt: 'please specify the user to search for.',
+                    type: 'string'
+                }
+            ],
             throttling: {
                 usages: 3,
                 duration: 10
             }
         })
     }
-    run(msg: CommandMessage, args: string): Promise<Message | Message[]> {
+    run(msg: CommandMessage, args: { user: string }): Promise<Message | Message[]> {
         return axios.post('https://graphql.anilist.co', 
             {
                 query: animeListQuery,
                 variables: {
-                    name: args
+                    name: args.user
                 }
             }
         ).then(resp => {
@@ -103,7 +110,7 @@ Planning:   ${al.stats.animeStatusDistribution[1].amount}`
                 }
             })
         }).catch(() => {
-            return msg.reply(`Could not get user ${args}.`)
+            return msg.reply(`Could not get user ${args.user}.`)
         })
     }
 }
