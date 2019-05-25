@@ -5,7 +5,8 @@ import { XmlEntities } from 'html-entities'
 const entities = new XmlEntities()
 
 import { mangaSearchQuery, mangaQuery, randomMangaQuery } from '../constants/anilist';
-import { Manga, MangaSearchPage } from '../interfaces/anilist';
+import { Manga } from '../interfaces/anilist';
+import { searchChooser } from '../util/anilist';
 
 const TurndownService = require('turndown')
 const turndownService = new TurndownService()
@@ -25,6 +26,13 @@ export class MangaCommand extends Command {
             description: 'Gives quick info about the searched manga.',
             aliases: ['m'],
             examples: ['manga kaguya sama'],
+            args: [
+                {
+                    key: 'manga',
+                    prompt: 'please specify the manga to search for.',
+                    type: 'string'
+                }
+            ],
             throttling: {
                 usages: 3,
                 duration: 10
@@ -32,65 +40,19 @@ export class MangaCommand extends Command {
         })
     }
 
-    async run(msg: CommandMessage, args: string): Promise<Message | Message[]> {
-        args = args as string
+    async run(msg: CommandMessage, args: { manga: string }): Promise<Message | Message[]> {
+        let { respMsg, id } = await searchChooser(mangaSearchQuery, args.manga, msg, this.EMBED_COLOR)
 
-        let respMsg: Message
-
-        let page = await this.search(args, 1)
-
-        // things to check the first time
-        if (page.pageInfo.total == 0) { // shows a random manga if none found
-            msg.channel.send('No manga found, here\'s a random manga instead.')
-            let manga = await this.randomManga()
-            return this.sendManga(msg.channel, manga)
-        } else if (page.pageInfo.total == 1) {
-            let manga = await this.getManga(page.media[0].id)
-            return this.sendManga(msg.channel, manga)
+        if (id == -1) { // there was no result
+            if (!respMsg) { // no results
+                msg.channel.send('No anime found, here\'s a random manga instead.')
+                let anime = await this.randomManga()
+                return this.sendManga(msg.channel, anime)
+            }
         } else {
-            respMsg = await this.sendSearch(msg.channel, page, args) as Message
+            let anime = await this.getManga(id)
+            return this.sendManga(msg.channel, anime, respMsg)
         }
-
-        while (true) {
-            let filter = (m: Message) => {
-                if (!m.author.equals(msg.author)) return false
-
-                let lower = m.content.toLowerCase()
-                if (lower === 'n' || lower === 'c') return true // next and cancel work
-
-                let n = Number(m.content)
-                if (isNaN(n)) return false // if it's not a number
-                if (n <= 0 || n > this.PER_PAGE) return false // if it's not within 1 - 8
-                if (!page.pageInfo.hasNextPage && (n > page.pageInfo.total % this.PER_PAGE && page.pageInfo.total % this.PER_PAGE != 0)) return false // if it's the last page and it's not within bounds
-
-                return true
-            }
-
-            try {
-                let collection = await msg.channel.awaitMessages(filter, { time: this.TIMEOUT, maxMatches: 1, errors: ['time'] })
-                let selection = collection.first().content
-
-                collection.first().delete()
-
-                if (selection == 'n') {
-                    if (page.pageInfo.hasNextPage) {
-                        page = await this.search(args, page.pageInfo.currentPage + 1)
-                        respMsg = await this.sendSearch(msg.channel, page, args, respMsg) as Message
-                    } else {
-                        return respMsg.edit('No more pages.', { embed: null })
-                    }
-                } else if (selection == 'c') {
-                    return respMsg.edit('Search cancelled.', { embed: null })
-                } else {
-                    let manga = await this.getManga(page.media[Number(selection) - 1].id)
-                    return this.sendManga(msg.channel, manga, respMsg)
-                }
-            } catch (err) {
-                return respMsg.edit('Search timed out.', { embed: null })
-            }
-
-        }
-
     }
 
     private sendManga(channel: TextChannel | DMChannel | GroupDMChannel, manga: Manga, msg?: Message): Promise<Message | Message[]> {
@@ -175,46 +137,6 @@ export class MangaCommand extends Command {
             footer: {
                 icon_url: 'https://avatars2.githubusercontent.com/u/18018524?s=280&v=4',
                 text: 'Fetched from Anilist.co'
-            }
-        })
-
-        if (msg) {
-            return msg.edit({ embed: embed })
-        } else {
-            return channel.send({ embed: embed })
-        }
-    }
-
-    private search(search: string, page: number): Promise<MangaSearchPage> {
-        return axios.post(this.API_URL,
-            {
-                query: mangaSearchQuery,
-                variables: {
-                    perPage: this.PER_PAGE,
-                    page: page,
-                    search: search
-                }
-            }
-        ).then(resp => {
-            return resp.data.data.Page as MangaSearchPage
-        })
-    }
-
-    private sendSearch(channel: TextChannel | DMChannel | GroupDMChannel, page: MangaSearchPage, search: string, msg?: Message): Promise<Message | Message[]> {
-        let results = ''
-        for (const [index, manga] of page.media.entries()) {
-            results += `${index + 1}. [${manga.title.userPreferred}](${manga.siteUrl})`
-            if (index < this.PER_PAGE - 1) {
-                results += '\n'
-            }
-        }
-        let embed = new RichEmbed({
-            title: `Search results for: "${search}" (page ${page.pageInfo.currentPage}/${page.pageInfo.lastPage})`,
-            color: this.EMBED_COLOR,
-            description: results,
-            footer: {
-                icon_url: 'https://avatars2.githubusercontent.com/u/18018524?s=280&v=4',
-                text: 'Type a number to select, "n" to go to the next page, or "c" to cancel.'
             }
         })
 

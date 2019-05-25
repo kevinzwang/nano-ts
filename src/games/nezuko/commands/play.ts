@@ -1,7 +1,7 @@
 import { Message, MessageReaction, User } from "discord.js";
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 
-import { getAssetPath } from "../../../util";
+import { getAssetPath } from "../../../util/general";
 import { Mode, getRandomModeAsync } from '../game-modes'
 import { wordExists, constructWordsList } from "../words";
 import { addPoints, setHighScore } from "../scores";

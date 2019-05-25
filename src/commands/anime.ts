@@ -5,7 +5,8 @@ import { XmlEntities } from 'html-entities'
 const entities = new XmlEntities()
 
 import { animeQuickSearchQuery, animeSearchQuery, animeQuery, randomAnimeQuery } from '../constants/anilist';
-import { Anime, AnimeSearchPage } from '../interfaces/anilist';
+import { Anime } from '../interfaces/anilist';
+import { searchChooser } from '../util/anilist';
 
 const TurndownService = require('turndown')
 const turndownService = new TurndownService()
@@ -14,8 +15,6 @@ export class AnimeCommand extends Command {
     private readonly API_URL = 'https://graphql.anilist.co'
     private readonly MAX_DESCRIPTION_LENGTH = 256
     private readonly EMBED_COLOR = 0x44b5f0
-    private readonly PER_PAGE = 8
-    private readonly TIMEOUT = 60000 // milliseconds
 
     constructor(client: CommandoClient) {
         super(client, {
@@ -29,6 +28,13 @@ export class AnimeCommand extends Command {
                 'anime kimi na wa',
                 'my favorite show of the season is {demon slayer}'
             ],
+            args: [
+                {
+                    key: 'anime',
+                    prompt: 'please specify the anime to search for.',
+                    type: 'string'
+                }
+            ],
             throttling: {
                 usages: 3,
                 duration: 10
@@ -36,72 +42,27 @@ export class AnimeCommand extends Command {
         })
     }
 
-    async run(msg: CommandMessage, args: string | string[], fromPattern: boolean): Promise<Message | Message[]> {
+    async run(msg: CommandMessage, args: string[] | { anime: string }, fromPattern: boolean): Promise<Message | Message[]> {
         if (fromPattern) { // quick search
-            args = (args as string[])[1] // gets the second result which is the not curly brace
+            let search = (args as string[])[1] // gets the second result which is the not curly brace
 
-            let anime = await this.quickSearch(args)
+            let anime = await this.quickSearch(search)
 
             if (anime) {
                 return this.sendAnime(msg.channel, anime)
             }
         } else {
-            args = args as string
+            let { respMsg, id } = await searchChooser(animeSearchQuery, (args as { anime: string }).anime, msg, this.EMBED_COLOR)
 
-            let respMsg: Message
-            
-            let page = await this.search(args, 1)
-            
-            // things to check the first time
-            if (page.pageInfo.total == 0) { // shows a random anime if none found
-                msg.channel.send('No anime found, here\'s a random anime instead.')
-                let anime = await this.randomAnime()
-                return this.sendAnime(msg.channel, anime)
-            } else if (page.pageInfo.total == 1) {
-                let anime = await this.getAnime(page.media[0].id)
-                return this.sendAnime(msg.channel, anime)
+            if (id == -1) { // there was no result
+                if (!respMsg) { // no results
+                    msg.channel.send('No anime found, here\'s a random anime instead.')
+                    let anime = await this.randomAnime()
+                    return this.sendAnime(msg.channel, anime)
+                }
             } else {
-                respMsg = await this.sendSearch(msg.channel, page, args) as Message
-            }
-
-            while (true) {
-                let filter = (m: Message) => {
-                    if (!m.author.equals(msg.author)) return false
-    
-                    let lower = m.content.toLowerCase()
-                    if (lower === 'n' || lower === 'c') return true // next and cancel work
-    
-                    let n = Number(m.content)
-                    if (isNaN(n)) return false // if it's not a number
-                    if (n <= 0 || n > this.PER_PAGE) return false // if it's not within 1 - 8
-                    if (!page.pageInfo.hasNextPage && (n > page.pageInfo.total % this.PER_PAGE && page.pageInfo.total % this.PER_PAGE != 0)) return false // if it's the last page and it's not within bounds
-    
-                    return true
-                }
-
-                try {
-                    let collection = await msg.channel.awaitMessages(filter, { time: this.TIMEOUT, maxMatches: 1, errors: ['time'] })
-                    let selection = collection.first().content
-
-                    collection.first().delete()
-
-                    if (selection == 'n') {
-                        if (page.pageInfo.hasNextPage) {
-                            page = await this.search(args, page.pageInfo.currentPage+1)
-                            respMsg = await this.sendSearch(msg.channel, page, args, respMsg) as Message    
-                        } else {
-                            return respMsg.edit('No more pages.', { embed: null})
-                        }
-                    } else if (selection == 'c') {
-                        return respMsg.edit('Search cancelled.', { embed: null})
-                    } else {
-                        let anime = await this.getAnime(page.media[Number(selection) - 1].id)
-                        return this.sendAnime(msg.channel, anime, respMsg)
-                    }
-                } catch (err) {
-                    return respMsg.edit('Search timed out.', { embed: null})
-                }
-
+                let anime = await this.getAnime(id)
+                return this.sendAnime(msg.channel, anime, respMsg)
             }
         }
     }
@@ -243,46 +204,6 @@ export class AnimeCommand extends Command {
         }).catch(() => {
             return null
         })
-    }
-
-    private search(search: string, page: number): Promise<AnimeSearchPage> {
-        return axios.post(this.API_URL,
-            {
-                query: animeSearchQuery,
-                variables: {
-                    perPage: this.PER_PAGE,
-                    page: page,
-                    search: search
-                }
-            }
-        ).then(resp => {
-            return resp.data.data.Page as AnimeSearchPage
-        })
-    }
-
-    private sendSearch(channel: TextChannel | DMChannel | GroupDMChannel, page: AnimeSearchPage, search: string, msg?: Message): Promise<Message | Message[]> {
-        let results = ''
-        for (const [index, anime] of page.media.entries()) {
-            results += `${index + 1}. [${anime.title.userPreferred}](${anime.siteUrl})`
-            if (index < this.PER_PAGE - 1) {
-                results += '\n'
-            }
-        }
-        let embed = new RichEmbed({
-            title: `Search results for: "${search}" (page ${page.pageInfo.currentPage}/${page.pageInfo.lastPage})`,
-            color: this.EMBED_COLOR,
-            description: results,
-            footer: {
-                icon_url: 'https://avatars2.githubusercontent.com/u/18018524?s=280&v=4',
-                text: 'Type a number to select, "n" to go to the next page, or "c" to cancel.'
-            }
-        })
-
-        if (msg) {
-            return msg.edit({ embed: embed })
-        } else {
-            return channel.send({ embed: embed })
-        }
     }
 
     private getAnime(id: number): Promise<Anime> {

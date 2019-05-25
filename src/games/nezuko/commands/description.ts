@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandMessage } from 'discord.js-commando'
 import { Message } from 'discord.js'
-import { getAssetPath } from '../../../util';
+import { getAssetPath } from '../../../util/general';
 import { description } from '..';
 
 export class DescriptionCommand extends Command {

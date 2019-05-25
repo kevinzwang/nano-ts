@@ -1,4 +1,4 @@
-export interface AnimeSearchPage {
+export interface MediaSearchPage {
     pageInfo: {
         total: number
         hasNextPage: boolean
@@ -56,23 +56,6 @@ export interface AnimeList  {
             amount: number
         }[]
     }
-}
-
-export interface MangaSearchPage {
-    pageInfo: {
-        total: number
-        hasNextPage: boolean
-        currentPage: number
-        lastPage: number
-    }
-    media: {
-        title: {
-            userPreferred: string
-        }
-        format: string
-        siteUrl: string
-        id: number
-    }[]
 }
 
 export interface Manga {

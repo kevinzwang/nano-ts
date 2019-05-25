@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import axios from "axios"
 
-import { getAssetPath } from "../../util";
+import { getAssetPath } from "../../util/general";
 
 export interface Mode {
     start(): string

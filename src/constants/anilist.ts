@@ -78,7 +78,7 @@ query RandomAnime($page: Int) {
 
 export const animeQuickSearchQuery = `
 query QuickAnimeSearch ($search: String) {
-    Media (search: $search) {
+    Media (search: $search, type: ANIME) {
         title {
             userPreferred
         }
