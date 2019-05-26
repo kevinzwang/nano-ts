@@ -11,20 +11,25 @@
     "serve": "node ."
   },
   "dependencies": {
-    "@types/html-entities": "^1.2.16",
-    "@types/js-base64": "^2.3.1",
-    "@types/mongoose": "^5.3.26",
     "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.3",
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
+    "ffmpeg-binaries": "^4.0.0",
+    "get-video-duration": "^1.0.3",
     "html-entities": "^1.2.1",
     "js-base64": "^2.4.9",
     "mongoose": "^5.5.2",
-    "rimraf": "^2.6.3",
+    "node-opus": "^0.3.1",
     "turndown": "^4.0.2"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.11",
+    "@types/html-entities": "^1.2.16",
+    "@types/js-base64": "^2.3.1",
+    "@types/mongoose": "^5.3.26",
     "@types/node": "^10.5.2",
+    "rimraf": "^2.6.3",
     "typescript": "^3.4.5"
   }
 }
