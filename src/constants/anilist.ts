@@ -1,3 +1,5 @@
+export const apiURL = 'https://graphql.anilist.co'
+
 export const animeSearchQuery = `
 query SearchAnime ($search: String, $page: Int, $perPage: Int) {
     Page (page: $page, perPage: $perPage) {
@@ -221,5 +223,43 @@ query RandomManga($page: Int) {
             }
         }
     }
+}
+`
+
+export const animeMusicInfoQuery = `
+query AnimeMusicInfo($id: Int) {
+    Media (id: $id) {
+        title {
+            userPreferred
+        }
+        siteUrl
+    	idMal
+        startDate {
+            year
+        }
+        coverImage {
+            large
+        }
+    }
+}
+`
+
+export const randomAnimeMusicInfoQuery = `
+query RandomAnimeMusicInfo($page: Int) {
+    Page(page: $page, perPage: 1) {
+        media (sort: POPULARITY_DESC) {
+            title {
+                userPreferred
+            }
+            siteUrl
+            idMal
+            startDate {
+                year
+            }
+            coverImage {
+                large
+            }
+        }
+    }  
 }
 `

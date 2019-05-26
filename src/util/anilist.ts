@@ -2,8 +2,8 @@ import { MediaSearchPage } from "../interfaces/anilist";
 import { Message, RichEmbed } from "discord.js";
 import axios from "axios";
 import { CommandMessage } from "discord.js-commando";
+import { apiURL } from "../constants/anilist";
 
-const API_URL = 'https://graphql.anilist.co'
 const PER_PAGE = 8
 const TIMEOUT = 60000 // milliseconds
 
@@ -16,7 +16,7 @@ const TIMEOUT = 60000 // milliseconds
  */
 export async function searchChooser(query: string, search: string, msg: CommandMessage, color: number): Promise<{ respMsg: Message, id: number }> {
     function getSearchPage(page: number): Promise<MediaSearchPage> {
-        return axios.post(API_URL,
+        return axios.post(apiURL,
             {
                 query: query,
                 variables: {

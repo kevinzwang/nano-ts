@@ -77,7 +77,7 @@ export interface Manga {
     }
 }
 
-export interface MangaList  {
+export interface MangaList {
     name: string
     avatar: {
         large: string
@@ -95,5 +95,19 @@ export interface MangaList  {
             status: string
             amount: number
         }[]
+    }
+}
+
+export interface AnimeMusicInfo {
+    title: {
+        userPreferred: string
+    }
+    siteUrl: string
+    idMal: number
+    startDate: {
+        year: number
+    }
+    coverImage: {
+        large: string
     }
 }

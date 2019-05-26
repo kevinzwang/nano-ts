@@ -4,7 +4,7 @@ import axios from 'axios'
 import { XmlEntities } from 'html-entities'
 const entities = new XmlEntities()
 
-import { mangaSearchQuery, mangaQuery, randomMangaQuery } from '../constants/anilist';
+import { mangaSearchQuery, mangaQuery, randomMangaQuery, apiURL } from '../constants/anilist';
 import { Manga } from '../interfaces/anilist';
 import { searchChooser } from '../util/anilist';
 
@@ -12,11 +12,8 @@ const TurndownService = require('turndown')
 const turndownService = new TurndownService()
 
 export class MangaCommand extends Command {
-    private readonly API_URL = 'https://graphql.anilist.co'
     private readonly MAX_DESCRIPTION_LENGTH = 256
     private readonly EMBED_COLOR = 0x44b5f0
-    private readonly PER_PAGE = 8
-    private readonly TIMEOUT = 60000 // milliseconds
 
     constructor(client: CommandoClient) {
         super(client, {
@@ -148,7 +145,7 @@ export class MangaCommand extends Command {
     }
 
     private getManga(id: number): Promise<Manga> {
-        return axios.post(this.API_URL,
+        return axios.post(apiURL,
             {
                 query: mangaQuery,
                 variables: {
@@ -161,7 +158,7 @@ export class MangaCommand extends Command {
     }
 
     private randomManga(): Promise<Manga> {
-        return axios.post(this.API_URL,
+        return axios.post(apiURL,
             {
                 query: randomMangaQuery,
                 variables: {
@@ -169,7 +166,7 @@ export class MangaCommand extends Command {
                 }
             }
         ).then(resp => {
-            return axios.post(this.API_URL,
+            return axios.post(apiURL,
                 {
                     query: randomMangaQuery,
                     variables: {

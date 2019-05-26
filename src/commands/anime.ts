@@ -4,7 +4,7 @@ import axios from 'axios'
 import { XmlEntities } from 'html-entities'
 const entities = new XmlEntities()
 
-import { animeQuickSearchQuery, animeSearchQuery, animeQuery, randomAnimeQuery } from '../constants/anilist';
+import { animeQuickSearchQuery, animeSearchQuery, animeQuery, randomAnimeQuery, apiURL } from '../constants/anilist';
 import { Anime } from '../interfaces/anilist';
 import { searchChooser } from '../util/anilist';
 
@@ -12,7 +12,6 @@ const TurndownService = require('turndown')
 const turndownService = new TurndownService()
 
 export class AnimeCommand extends Command {
-    private readonly API_URL = 'https://graphql.anilist.co'
     private readonly MAX_DESCRIPTION_LENGTH = 256
     private readonly EMBED_COLOR = 0x44b5f0
 
@@ -192,7 +191,7 @@ export class AnimeCommand extends Command {
     }
 
     private quickSearch(search: string): Promise<Anime> {
-        return axios.post(this.API_URL,
+        return axios.post(apiURL,
             {
                 query: animeQuickSearchQuery,
                 variables: {
@@ -207,7 +206,7 @@ export class AnimeCommand extends Command {
     }
 
     private getAnime(id: number): Promise<Anime> {
-        return axios.post(this.API_URL,
+        return axios.post(apiURL,
             {
                 query: animeQuery,
                 variables: {
@@ -220,7 +219,7 @@ export class AnimeCommand extends Command {
     }
 
     private randomAnime(): Promise<Anime> {
-        return axios.post(this.API_URL,
+        return axios.post(apiURL,
             {
                 query: randomAnimeQuery,
                 variables: {
@@ -228,7 +227,7 @@ export class AnimeCommand extends Command {
                 }
             }
         ).then(resp => {
-            return axios.post(this.API_URL,
+            return axios.post(apiURL,
                 {
                     query: randomAnimeQuery,
                     variables: {
