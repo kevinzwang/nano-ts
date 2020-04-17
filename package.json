@@ -4,7 +4,7 @@
   "description": "Kevin's Discord bot, this time written in Typescript with the Discord.js lib.",
   "main": "dist/index.js",
   "author": "kevinzwang",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "start": "yarn run build && yarn run serve",
     "build": "rimraf dist/ && tsc",
